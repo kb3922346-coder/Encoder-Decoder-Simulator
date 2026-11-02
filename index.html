@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encoder &amp; Decoder Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-info">
+        <h1>Encoder &amp; Decoder Simulator</h1>
+        <p>Interactive Digital Logic Circuit Simulator</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">🌙</button>
+    </header>
+
+    <!-- Simulator Tabs -->
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-panel="encoderPanel" role="tab" aria-selected="true">
+        4-to-2 Encoder
+      </button>
+      <button class="tab-btn" data-panel="decoderPanel" role="tab" aria-selected="false">
+        2-to-4 Decoder
+      </button>
+    </nav>
+
+    <!-- 4-to-2 Encoder Panel -->
+    <main class="card" id="encoderPanel" role="tabpanel">
+      <div class="card-header">
+        <div>
+          <h2>4-to-2 Binary Encoder</h2>
+          <p>Converts 1 active input into a 2-bit binary code (A₁ A₀).</p>
+        </div>
+        <span class="badge">Active-HIGH</span>
+      </div>
+
+      <div class="sim-grid">
+        <!-- Inputs -->
+        <div class="sim-col">
+          <h3>Inputs (Select one)</h3>
+          <div class="input-grid" id="encoderInputs">
+            <button class="logic-btn selected" data-index="0">
+              <span class="btn-label">I₀</span>
+              <span class="btn-state">1</span>
+            </button>
+            <button class="logic-btn" data-index="1">
+              <span class="btn-label">I₁</span>
+              <span class="btn-state">0</span>
+            </button>
+            <button class="logic-btn" data-index="2">
+              <span class="btn-label">I₂</span>
+              <span class="btn-state">0</span>
+            </button>
+            <button class="logic-btn" data-index="3">
+              <span class="btn-label">I₃</span>
+              <span class="btn-state">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Logic IC Representation -->
+        <div class="sim-chip-col">
+          <div class="chip">
+            <div class="chip-title">4 : 2</div>
+            <div class="chip-sub">ENCODER</div>
+          </div>
+        </div>
+
+        <!-- Outputs -->
+        <div class="sim-col">
+          <h3>Binary Output</h3>
+          <div class="output-bits">
+            <div class="bit-card">
+              <span class="bit-title">A₁ (MSB)</span>
+              <span class="bit-value" id="encA1">0</span>
+            </div>
+            <div class="bit-card">
+              <span class="bit-title">A₀ (LSB)</span>
+              <span class="bit-value" id="encA0">0</span>
+            </div>
+          </div>
+          <div class="status-box">
+            Selected: <strong id="encSelected">I₀</strong> &bull; Decimal: <strong id="encDecimal">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Truth Table -->
+      <div class="table-section">
+        <h3>Truth Table <small>(Click any row to test)</small></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Active Input</th>
+              <th>A₁</th>
+              <th>A₀</th>
+              <th>Binary Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight" data-index="0" title="Click to select I0">
+              <td><strong>I₀</strong></td>
+              <td>0</td>
+              <td>0</td>
+              <td><code>00</code></td>
+            </tr>
+            <tr data-index="1" title="Click to select I1">
+              <td><strong>I₁</strong></td>
+              <td>0</td>
+              <td>1</td>
+              <td><code>01</code></td>
+            </tr>
+            <tr data-index="2" title="Click to select I2">
+              <td><strong>I₂</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td><code>10</code></td>
+            </tr>
+            <tr data-index="3" title="Click to select I3">
+              <td><strong>I₃</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td><code>11</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- 2-to-4 Decoder Panel -->
+    <main class="card hidden" id="decoderPanel" role="tabpanel">
+      <div class="card-header">
+        <div>
+          <h2>2-to-4 Binary Decoder</h2>
+          <p>Converts a 2-bit binary code (A₁ A₀) to activate 1 output line (Y₀–Y₃).</p>
+        </div>
+        <span class="badge">Active-HIGH</span>
+      </div>
+
+      <div class="sim-grid">
+        <!-- Inputs -->
+        <div class="sim-col">
+          <h3>Binary Inputs (Click to toggle)</h3>
+          <div class="switch-grid">
+            <div class="switch-box">
+              <span class="switch-label">A₁ (MSB)</span>
+              <button class="bit-switch" id="decA1" aria-label="Toggle bit A1">0</button>
+            </div>
+            <div class="switch-box">
+              <span class="switch-label">A₀ (LSB)</span>
+              <button class="bit-switch" id="decA0" aria-label="Toggle bit A0">0</button>
+            </div>
+          </div>
+          <div class="status-box">
+            Binary Input: <strong id="decValue">00</strong>
+          </div>
+        </div>
+
+        <!-- Logic IC Representation -->
+        <div class="sim-chip-col">
+          <div class="chip">
+            <div class="chip-title">2 : 4</div>
+            <div class="chip-sub">DECODER</div>
+          </div>
+        </div>
+
+        <!-- Outputs -->
+        <div class="sim-col">
+          <h3>Outputs</h3>
+          <div class="output-led-grid" id="decoderOutputs">
+            <div class="led-card active">
+              <span class="led-indicator"></span>
+              <span class="led-label">Y₀</span>
+              <span class="led-state">1</span>
+            </div>
+            <div class="led-card">
+              <span class="led-indicator"></span>
+              <span class="led-label">Y₁</span>
+              <span class="led-state">0</span>
+            </div>
+            <div class="led-card">
+              <span class="led-indicator"></span>
+              <span class="led-label">Y₂</span>
+              <span class="led-state">0</span>
+            </div>
+            <div class="led-card">
+              <span class="led-indicator"></span>
+              <span class="led-label">Y₃</span>
+              <span class="led-state">0</span>
+            </div>
+          </div>
+          <div class="status-box">
+            Active Output: <strong id="decActive">Y₀</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Truth Table -->
+      <div class="table-section">
+        <h3>Truth Table <small>(Click any row to test)</small></h3>
+        <table>
+          <thead>
+            <tr>
+              <th>A₁</th>
+              <th>A₀</th>
+              <th>Y₀</th>
+              <th>Y₁</th>
+              <th>Y₂</th>
+              <th>Y₃</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight" data-bits="0,0" title="Click to test 00">
+              <td>0</td>
+              <td>0</td>
+              <td><strong>1</strong></td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr data-bits="0,1" title="Click to test 01">
+              <td>0</td>
+              <td>1</td>
+              <td>0</td>
+              <td><strong>1</strong></td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr data-bits="1,0" title="Click to test 10">
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td><strong>1</strong></td>
+              <td>0</td>
+            </tr>
+            <tr data-bits="1,1" title="Click to test 11">
+              <td>1</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td><strong>1</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Quick Reference Summary -->
+    <footer class="info-footer">
+      <div class="info-card">
+        <h3>⚡ What is an Encoder?</h3>
+        <p>Compresses <strong>2ⁿ inputs</strong> into <strong>n binary outputs</strong>. Here, 4 input lines are encoded into 2 binary bits. Used in computer keyboards and data transmission.</p>
+      </div>
+      <div class="info-card">
+        <h3>💡 What is a Decoder?</h3>
+        <p>Expands <strong>n binary inputs</strong> into <strong>2ⁿ outputs</strong>. Here, 2 binary bits activate 1 of 4 output lines. Used in memory address decoding and display drivers.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
